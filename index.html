@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Générateur de cartes</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet"> 
+    </head>
+    <body>
+
+        <header>
+            <img style="float: right" width="50" src="tear.png"/>
+        </header>
+
+        <div style="border: 1px lightgray solid; height: 210px; width:370px">
+            <strong><span style="font-family: roboto; font-size: larger; position: absolute; top: 20px; left:20px" >Lycée E. D'ALZON</span></strong>
+            <strong><span id="txtname" style="font-family: roboto;font-size: large; position: absolute; top: 60px; left:20px" >NOM Prénom</span></strong>
+            <span id="accred" style="font-family: roboto; font-size: large; position: absolute; top: 80px; left:20px" >EXTERNE LIBRE</span>
+            <span id="txtclasse" style="font-family: roboto; font-size: large; position: absolute; top: 100px; left:20px" >CLASSE</span>
+            <img id="barcode" style="position: absolute; top: 120px; left:11px" src="http://barcodes4.me/barcode/c39/000000.png?resolution=2.5&height=80"/>
+            <span id = "txtcode" style="position: absolute; top: 190px; left:20px" >000000</span>
+
+            <img id="imgphoto" style="filter: grayscale(100%); position: absolute; top: 40px; left:240px" src="placeholder.png" height="130" width="110">
+        </div>
+    
+        <div class="menu">
+            <input id="number"/><button onClick="generate()">Chercher par ID</button><br/>
+            <input id="name"/><button onClick="generateFromName()">Chercher par Nom/prenom</button><br/>
+            Image: <input id="file-input" type="file" accept="image/*"><br/>
+            Régime: <input id="accredin"/><button onClick="changeAccred()">Changer</button>
+        </div>
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
+    <script>
+            output = document.getElementById("imgphoto")
+
+            const fileInput = document.getElementById('file-input');
+
+            fileInput.addEventListener('change', (e) => {
+                let file = null;
+                let fileList = e.target.files;
+
+                for (let i = 0; i < fileList.length; i++) {
+                    if (fileList[i].type.match(/^image\//)) {
+                        file = fileList[i];
+                        break;
+                    }
+                }
+
+                if (file !== null) {
+                    output.src = URL.createObjectURL(file);
+                }
+            });
+
+        function updatecard(element) {
+            console.log(element);
+
+                        newsrc="http://barcodes4.me/barcode/c39/" + (element.idMembre + 558391) + ".png?resolution=2.5&height=80"
+                        
+                        document.getElementById("barcode").src = newsrc;
+                        document.getElementById("txtcode").innerHTML = element.idMembre + 558391
+                        document.getElementById("txtname").innerHTML = element.nom + " " + element.prenom
+                        document.getElementById("txtclasse").innerHTML = element.libelleClasse
+        }
+        
+        function generate() {
+            eleves = $.getJSON('/eleves.json', () => {
+                console.log(eleves.responseJSON.e);
+                eleves.responseJSON.e.forEach(element => {
+                    if (element.idMembre == document.getElementById("number").value) {
+                        updatecard(element);
+                    }
+                });
+            });
+        }
+
+        function generateFromName() {
+            eleves = $.getJSON('eleves.json', () => {
+                console.log(eleves.responseJSON.e);
+                eleves.responseJSON.e.forEach(element => {
+                    if (document.getElementById("name").value.toLowerCase().includes(" ")) {
+                        if (document.getElementById("name").value.toLowerCase().includes(element.nom.toLowerCase()) && document.getElementById("name").value.toLowerCase().includes(element.prenom.toLowerCase())) {
+                            updatecard(element);
+                        }
+                    }
+                    if (element.nom.toLowerCase().includes(document.getElementById("name").value.toLowerCase())) {
+                        updatecard(element);
+                    }
+                });
+            });
+        }
+
+        function changeAccred() {
+            document.getElementById("accred").innerHTML = document.getElementById("accredin").value.toUpperCase();
+        }
+        
+    </script>
+</html>
