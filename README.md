@@ -6,4 +6,5 @@ Je n'ai pas confirmation pour le moment que la clef est commune à tout les éta
 
 Inclure votre propre eleves.json et changer la clef selon votre établissement
 
-Site (pour le site d'alzon nimes): https://ifndev.software/cartes
+Démo (pour le site d'alzon nimes): https://ifndev.software/cartes
+Supporte les classes de la 3ème à la Terminale pour la promo 2019/2020
