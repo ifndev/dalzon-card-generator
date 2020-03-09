@@ -4,6 +4,14 @@
         <meta charset="utf-8"/>
         <title>Générateur de cartes</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet"> 
+        <style>
+            #rendered [contenteditable=true]:focus {
+                background-color: lightgray;
+            }
+            #rendered [contenteditable=true] {
+                border: 1px solid cyan;
+            }
+        </style>
     </head>
     <body>
 
@@ -11,8 +19,8 @@
             <img style="float: right" width="50" src="tear.png"/>
         </header>
 
-        <div style="border: 1px lightgray solid; height: 210px; width:370px">
-            <strong><span style="font-family: roboto; font-size: larger; position: absolute; top: 20px; left:20px" >Lycée E. D'ALZON</span></strong>
+        <div id="rendered" style="border: 1px lightgray solid; height: 210px; width:370px">
+            <strong><span id="txtschool" style="font-family: roboto; font-size: larger; position: absolute; top: 20px; left:20px" >Lycée E. D'ALZON</span></strong>
             <strong><span id="txtname" style="font-family: roboto;font-size: large; position: absolute; top: 60px; left:20px" >NOM Prénom</span></strong>
             <span id="accred" style="font-family: roboto; font-size: large; position: absolute; top: 80px; left:20px" >EXTERNE LIBRE</span>
             <span id="txtclasse" style="font-family: roboto; font-size: large; position: absolute; top: 100px; left:20px" >CLASSE</span>
@@ -23,14 +31,21 @@
         </div>
     
         <div class="menu">
-            <input id="number"/><button onClick="generate()">Chercher par ID</button><br/>
-            <input id="name"/><button onClick="generateFromName()">Chercher par Nom/prenom</button><br/>
+            <input id="number"/><button onclick="generate()">Chercher par ID</button><br/>
+            <input id="name"/><button onclick="generateFromName()">Chercher par Nom/prenom</button><br/>
             Image: <input id="file-input" type="file" accept="image/*"><br/>
-            Régime: <input id="accredin"/><button onClick="changeAccred()">Changer</button>
+            Régime: <input id="accredin"/><button onclick="changeAccred()">Changer</button>
+            <br><br>
+            <label>
+                <input type="checkbox" onchange="toggleManualEditingMode()" name="toggle-manual-edit-mode" id="toggle-manual-edit-mode">
+                Éditer manuellement 
+            </label>
+            <button onclick="reset()">Réinitialiser</button>
         </div>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
     <script>
+            MERCI_STATIM = 558391
             output = document.getElementById("imgphoto")
 
             const fileInput = document.getElementById('file-input');
@@ -53,13 +68,12 @@
 
         function updatecard(element) {
             console.log(element);
-
-                        newsrc="http://barcodes4.me/barcode/c39/" + (element.idMembre + 558391) + ".png?resolution=2.5&height=80"
-                        
-                        document.getElementById("barcode").src = newsrc;
-                        document.getElementById("txtcode").innerHTML = element.idMembre + 558391
-                        document.getElementById("txtname").innerHTML = element.nom + " " + element.prenom
-                        document.getElementById("txtclasse").innerHTML = element.libelleClasse
+            newsrc="http://barcodes4.me/barcode/c39/" + (element.idMembre + MERCI_STATIM) + ".png?resolution=2.5&height=80"
+            
+            document.getElementById("barcode").src = newsrc;
+            document.getElementById("txtcode").innerHTML = element.idMembre + MERCI_STATIM
+            document.getElementById("txtname").innerHTML = element.nom + " " + element.prenom
+            document.getElementById("txtclasse").innerHTML = element.libelleClasse
         }
         
         function generate() {
@@ -91,6 +105,21 @@
 
         function changeAccred() {
             document.getElementById("accred").innerHTML = document.getElementById("accredin").value.toUpperCase();
+        }
+
+        function toggleManualEditingMode() {
+            const btn = document.getElementById('toggle-manual-edit-mode')
+            let enabled = btn.value === 'on'
+            const editableElements = ['txtname', 'accred', 'txtclasse', 'txtschool'].map(id => document.getElementById(id))
+            console.info(enabled)
+            for (const el of editableElements) {
+                el.contentEditable = enabled
+            }
+            btn.value = enabled ? 'off' : 'on'
+        }
+
+        function reset() {
+            window.location.reload()
         }
         
     </script>
