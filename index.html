@@ -34,7 +34,11 @@
             <input id="number"/><button onclick="generate()">Chercher par ID</button><br/>
             <input id="name"/><button onclick="generateFromName()">Chercher par Nom/prenom</button><br/>
             Image: <input id="file-input" type="file" accept="image/*"><br/>
-            Régime: <input id="accredin"/><button onclick="changeAccred()">Changer</button>
+            Régime: <select id="accredin" onchange="changeAccred();" selectedIndex="0">
+                <option value="EXTERNE LIBRE">EXTERNE LIBRE</option>
+                <option value="INTERNE">INTERNE</option>
+                <option value="DEMI-PENSIONAIRE">DEMI-PENSIONAIRE</option>
+              </select>                         
             <br><br>
             <label>
                 <input type="checkbox" onchange="toggleManualEditingMode()" name="toggle-manual-edit-mode" id="toggle-manual-edit-mode">
@@ -105,7 +109,7 @@
         }
 
         function changeAccred() {
-            document.getElementById("accred").innerHTML = document.getElementById("accredin").value.toUpperCase();
+            document.getElementById("accred").innerHTML = document.getElementById("accredin").value;
         }
 
         function toggleManualEditingMode() {
