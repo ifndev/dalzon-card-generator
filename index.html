@@ -40,6 +40,7 @@
                 <option value="DEMI-PENSIONAIRE">DEMI-PENSIONAIRE</option>
               </select>                         
             <br><br>
+            <button onclick="printCard()">Imprimer la carte</button><br/>
             <label>
                 <input type="checkbox" onchange="toggleManualEditingMode()" name="toggle-manual-edit-mode" id="toggle-manual-edit-mode">
                 Éditer manuellement 
@@ -48,6 +49,7 @@
             Code source disponible <a href="https://github.com/ifndev/dalzon-card-generator"> sur github </a>
         </div>
     </body>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
     <script>
             MERCI_STATIM = 558391
@@ -127,5 +129,13 @@
             window.location.reload()
         }
         
+        function printCard() {        
+            var restorepage = $('body').html();
+            var printcontent = $('#rendered').clone();
+            $('body').empty().html(printcontent);
+            window.print();
+            $('body').html(restorepage);
+        }
+
     </script>
 </html>
