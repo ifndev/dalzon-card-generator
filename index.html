@@ -52,7 +52,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
     <script>
-            MERCI_STATIM = 558391
+            CLEF = 558391
             output = document.getElementById("imgphoto")
 
             const fileInput = document.getElementById('file-input');
@@ -75,10 +75,10 @@
 
         function updatecard(element) {
             console.log(element);
-            newsrc="http://barcodes4.me/barcode/c39/" + (element.idMembre + MERCI_STATIM) + ".png?resolution=2.5&height=80"
+            newsrc="http://barcodes4.me/barcode/c39/" + (element.idMembre + CLEF) + ".png?resolution=2.5&height=80"
             
             document.getElementById("barcode").src = newsrc;
-            document.getElementById("txtcode").innerHTML = element.idMembre + MERCI_STATIM
+            document.getElementById("txtcode").innerHTML = element.idMembre + CLEF
             document.getElementById("txtname").innerHTML = element.nom + " " + element.prenom
             document.getElementById("txtclasse").innerHTML = element.libelleClasse
         }
